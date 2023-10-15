@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "plotly.js": "^2.25.2",
+    "react-plotly.js": "^2.6.0"
+  }
+}
