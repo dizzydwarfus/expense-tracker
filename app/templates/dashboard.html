@@ -176,28 +176,34 @@
         </div>
         </div>        
     </div>  
-    <div class="chart-container">
-        <h2>Expenses by Category</h2>
-        <div class="chart">
-            <canvas id="pieChart"></canvas>
-        </div>2
-    </div>
-    <div class="chart-container">
+    <div class="charts-row">
+        <div class="chart-container pie-chart">
+            <h2>Expenses by Category</h2>
+            <div class="chart canvas-wrapper">
+                <canvas id="pieChart"></canvas>
+            </div>  
+        </div>
+        
+        <div class="chart-container bar-chart">
+            <h2>Expenses by Category Over Time</h2>
+            <div class="chart canvas-wrapper">
+                <canvas id="stackedBarChart"></canvas>
+            </div>
+        </div>
+    </div>    
+
+    <!--<div class="chart-container">
         <h2>Expenses Over Time</h2>
         <div class="chart">
-            <canvas id="barChart"></canvas>
+            <canvas id="lineChart"></canvas>
         </div>
-    </div>
-    <div class="chart-container">
-        <h2>Expenses by Category Over Time</h2>
-        <div class="chart">
-            <canvas id="stackedBarChart"></canvas>
-        </div>
-    </div>
-    <div class="chart-container">
+    </div>-->
+
+    
+    <!--<div class="chart-container">
         <h2>Heatmap of Expenses</h2>
         <div class="chart" id="heatMap"></div>
-    </div>
+    </div>-->
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>

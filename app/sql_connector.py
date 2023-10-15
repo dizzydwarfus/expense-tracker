@@ -40,12 +40,12 @@ def test_connection(connection_string):
         assert False, f'Connection test failed: {e}'
 
 
-server = secrets['azure_sql_server']
-database = secrets['azure_sql_database']
-username = secrets['azure_DB_username']
-password = secrets['azure_DB_password']
-port = secrets['port']
-driver = secrets['azure_DB_driver']
+server = secrets['local_server']
+database = secrets['local_database']
+username = secrets['local_DB_username']
+password = secrets['local_DB_password']
+port = secrets['local_port']
+driver = secrets['local_driver']
 
 CreateURL = partial(create_connection_url, server=server,
                     username=username, password=password, port=port, driver=driver,)

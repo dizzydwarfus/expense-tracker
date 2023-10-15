@@ -107,6 +107,8 @@ $(document).ready(function() {
             // Configuration options
             plugins: [ChartDataLabels],
             options: {
+                maintainaspectratio: false,
+                responsive: true,
                 plugins: {
                     tooltip: {
                         enabled: true,
@@ -129,11 +131,11 @@ $(document).ready(function() {
     }
 
     // Function to plot a bar chart of expenses over time
-    function plotBarChart(dates, amounts) {
+    function plotLineChart(dates, amounts) {
         // Assuming you already have a <canvas> element in your HTML with id="barChart"
-        let ctx = document.getElementById('barChart').getContext('2d');
+        let ctx = document.getElementById('lineChart').getContext('2d');
         let chart = new Chart(ctx, {
-            type: 'bar',
+            type: 'line',
             data: {
                 labels: dates,
                 datasets: [{
@@ -147,6 +149,8 @@ $(document).ready(function() {
             },
             plugins: [ChartDataLabels],
             options: {
+                maintainaspectratio: false,
+                responsive: true,
                 plugins: {
                     tooltip: {
                         enabled: true,
@@ -186,6 +190,8 @@ $(document).ready(function() {
             },
             plugins: [ChartDataLabels],
             options: {
+                maintainaspectratio: false,
+                responsive: true,
                 scales: {
                     x: {
                         stacked: true,
@@ -230,8 +236,8 @@ $(document).ready(function() {
 
     // Plotting the data
     plotPieChart(categories, amounts);
-    plotBarChart(dates, amounts);
+    // plotLineChart(dates, amounts);
     plotStackedBarChart(dates, categoryData);
-    plotHeatMap(dates, amounts);
+    // plotHeatMap(dates, amounts);
 
 });

@@ -7,7 +7,7 @@ from ._constants import categories_dict
 
 secrets = dotenv_values(".env")
 
-db_conn_string = CreateURL(database=secrets['azure_sql_database'])
+db_conn_string = CreateURL(database=secrets['local_database'])
 db = SQLAlchemy()
 login_manager = LoginManager()
 
