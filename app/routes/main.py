@@ -17,7 +17,7 @@ def index():
 def dashboard():
     # Retrieve expenses from the database
     expenses = Expense.query.filter_by(user_id=current_user.id).order_by(
-        Expense.date_of_expense.desc()).all()
+        Expense.date_of_expense.asc()).all()
 
     # Group expenses by month and category
     expenses_by_month_category = {}

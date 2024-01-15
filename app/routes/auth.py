@@ -21,6 +21,7 @@ def login():
         # Check if the user actually exists and validate the password
         if not user or not check_password_hash(user.password_hash, password):
             flash('Please check your login details and try again.')
+            print('Please check your login details and try again.')
             return redirect(url_for('auth.login'))
 
         # If the above check passes, then we know the user has the right credentials
@@ -37,10 +38,12 @@ def signup():
         email = request.form.get('email')
         password = request.form.get('password')
 
-        user = User.query.filter_by(email=email).first()
+        user = User.query.filter_by(username=username).first()
+        email = User.query.filter_by(email=email).first()
 
         if user:  # if a user is found, we want to redirect back to signup page so user can try again
-            flash('Email address already exists')
+            flash('Username already exists. Please choose another username.')
+            print('Username already exists. Please choose another username.')
             return redirect(url_for('auth.signup'))
 
         # create a new user with the form data. Hash the password so the plaintext version isn't saved.
