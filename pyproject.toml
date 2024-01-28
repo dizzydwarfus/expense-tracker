@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "expense-tracker"
+version = "0.1.0"
+description = ""
+authors = ["dizzydwarfus"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+python-dotenv = "^1.0.1"
+pymongo = "^4.6.1"
+SQLAlchemy = "^2.0.25"
+Werkzeug = "^3.0.1"
+plotly = "^5.18.0"
+flask = "^3.0.1"
+pydantic = "^2.5.3"
+
+
+[tool.poetry.group.dev.dependencies]
+jupyter = "^1.0.0"
+ipykernel = "^6.29.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -1,9 +1,9 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
-from .sql_connector import CreateURL
+from .utils.sql_connector import CreateURL
 from dotenv import dotenv_values
-from ._constants import categories_dict
+from .utils._constants import categories_dict
 
 secrets = dotenv_values(".env")
 
