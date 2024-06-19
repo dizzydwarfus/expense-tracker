@@ -24,3 +24,6 @@ yarn-error.log*
 
 *.pyc
 poetry.lock
+
+*.log
+.env
