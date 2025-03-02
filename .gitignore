@@ -27,3 +27,5 @@ poetry.lock
 
 *.log
 .env
+
+venv312
