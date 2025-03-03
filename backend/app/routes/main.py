@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, jsonify
 from flask_login import login_required, current_user
 from app.models.transactions import Transaction
-from app.models.categories import Category, SubCategory
+from app.models.categories import CategoryModel
 
 main = Blueprint("main", __name__)
 
@@ -33,8 +33,7 @@ def dashboard():
         expenses_by_month_category[month][category].append(expense)
 
     # Retrieve unique categories from the database
-    unique_categories = Category.query.all()
-    unique_sub_categories = SubCategory.query.all()
+    unique_categories = CategoryModel.query.all()
 
     # Prepare the data for the charts
     categories = [category.name for category in unique_categories]

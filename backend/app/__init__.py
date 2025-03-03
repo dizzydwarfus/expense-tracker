@@ -1,24 +1,31 @@
 # backend/app/__init__.py
 
 from flask import Flask
+from flask_cors import CORS
 from flask_login import LoginManager
-from dotenv import dotenv_values
+from dotenv import load_dotenv
 from app.utils._constants import categories_dict
 
 from app.utils.mongodb_connector import ExpenseTrackerWebAppDB
 from app.utils.mongo_user import MongoUser  # We'll create this file
 
-secrets = dotenv_values(".env")
+load_dotenv()
 login_manager = LoginManager()
 
 
 def create_app():
     app = Flask(__name__)
-    app.config["SECRET_KEY"] = secrets["SECRET_KEY"]
+    app.config.from_prefixed_env("FLASK")
+
+    # Initialize CORS with default settings
+    CORS(
+        app,
+        resources={r"/*": {"origins": "http://localhost:3000"}},
+        supports_credentials=True,
+    )
 
     # Initialize the MongoDB connection
-    mongo_connection_string = secrets["MONGODB_URI"]  # e.g. "mongodb://localhost:27017"
-    app.mongo = ExpenseTrackerWebAppDB(mongo_connection_string)
+    app.mongo = ExpenseTrackerWebAppDB(app.config["MONGODB_URI"])
 
     # Attempt to seed categories if needed:
     # You might want to check if categories are empty first, then seed:

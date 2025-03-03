@@ -1,12 +1,11 @@
 # backend/app/routes/auth.py
 
-from flask import Blueprint, request, redirect, url_for, flash
+from flask import Blueprint, request, flash
 from flask_login import login_user, logout_user, login_required, current_user
 from app.utils._password_utils import check_password
 from app.utils.mongo_user import MongoUser
 from werkzeug.security import generate_password_hash  # If you want to keep using it
 
-# Or import custom hash/check from _password_utils
 from app import create_app
 
 auth = Blueprint("auth", __name__)
@@ -37,8 +36,6 @@ def login():
         flash("Please check your login details and try again.")
         return {"error": "Invalid credentials"}, 401
 
-    # Use your own function or the pydantic-based user check
-    # Suppose user_doc["password"] is the hashed password
     stored_password = user_doc["password"]
     if not check_password(stored_password, password):
         flash("Invalid password.")
@@ -55,6 +52,7 @@ def login():
 def signup():
     data = request.get_json() or request.form
     username = data.get("username")
+    nickname = data.get("nickname")
     email = data.get("email")
     password = data.get("password")
 
@@ -74,14 +72,9 @@ def signup():
     if existing_email:
         return {"error": "Email already exists"}, 400
 
-    hashed = app.mongo.hash_password(password)  # or your method from _password_utils
-    new_user_doc = {
-        "_id": username,
-        "email": email,
-        "password": hashed,
-        "createdAt": app.mongo.now(),
-    }
-    app.mongo.users.insert_one(new_user_doc)
+    app.mongo.upsert_user(
+        username=username, name=nickname, email=email, password=password
+    )
     return {"success": True, "message": "User registered successfully"}
 
 

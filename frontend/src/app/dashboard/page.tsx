@@ -16,6 +16,9 @@ interface Expense {
   date_of_expense: string;
   cost: number;
 }
+//TODO: match interface Expense with Transaction Model
+//TODO: make sure category/sub-category selection is from stored mappings
+//TODO: make sure add/edit expense works with backend mongodb
 
 export default function DashboardPage() {
   // 2) Use the Expense type (plus null) for your state

@@ -9,4 +9,5 @@ class User(BaseModel):
         ..., min_length=1, pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$"
     )
     password: str = Field(..., min_length=8)
+    name: str = Field(..., min_length=1, max_length=30, pattern="^[a-zA-Z0-9_ ]+$")
     groups: List[str] = []

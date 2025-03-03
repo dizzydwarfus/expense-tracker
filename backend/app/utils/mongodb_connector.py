@@ -3,14 +3,13 @@ import datetime as dt
 from typing import Union
 
 # Third party libraries
-from pymongo import MongoClient, ASCENDING, IndexModel, UpdateOne
-from pymongo.errors import OperationFailure
+from pymongo import MongoClient
 
 # Internal imports
-from ._logger import MyLogger
-from ._password_utils import hash_password
-from ..models.users import User
-from ..models.transactions import Transaction
+from app.utils._logger import MyLogger
+from app.utils._password_utils import hash_password
+from app.models.users import User
+from app.models.transactions import Transaction
 
 
 class MongoConnector(MyLogger):
