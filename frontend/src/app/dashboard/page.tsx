@@ -21,12 +21,10 @@ interface Expense {
 //TODO: make sure add/edit expense works with backend mongodb
 
 export default function DashboardPage() {
-  // 2) Use the Expense type (plus null) for your state
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
 
-  // 3) Actually call this function in your JSX to avoid the “unused” error
   const openEditModal = (expense: Expense) => {
     setEditingExpense(expense);
     setShowEditModal(true);

@@ -5,6 +5,7 @@ from flask_login import login_required, current_user
 from app.utils.mongo_user import MongoUser
 from urllib.parse import unquote
 from app import create_app
+import json
 
 expenses = Blueprint("expenses", __name__)
 
@@ -33,7 +34,8 @@ def add_expense():
         "user_id": user_id,
         # maybe store a createdAt, updatedAt, etc.
     }
-    app.mongo.transactions.insert_one(new_expense_doc)
+    print(json.dumps(new_expense_doc, indent=2))
+    # app.mongo.transactions.insert_one(new_expense_doc)
     return {"success": True}
 
 

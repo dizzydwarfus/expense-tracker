@@ -25,7 +25,7 @@ export default function AddExpenseModal({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const resp = await fetch("http://localhost:5000/add_expense", {
+      const resp = await fetch("http://127.0.0.1:5000/add_expense", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -39,7 +39,8 @@ export default function AddExpenseModal({
       });
       if (!resp.ok) {
         // handle error
-        console.error("Failed to add expense");
+        const data = await resp.json();
+        console.error("Failed to add expense", JSON.stringify(data, null, 2));
         return;
       }
       // If success, close modal and reload or refetch
