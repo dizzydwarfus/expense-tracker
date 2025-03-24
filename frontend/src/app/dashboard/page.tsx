@@ -2,11 +2,13 @@
 
 import React, { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
-import AddExpenseModal from "@/components/AddExpenseModal";
+// import AddExpenseModal from "@/components/AddExpenseModal";
 import { EditExpenseModal } from "@/components/EditExpenseModal";
 import { Transaction } from "@/components/interfaces/transaction";
 import PieChart from "@/components/charts/PieChart";
 import StackedBarChart from "@/components/charts/StackedBarChart";
+import ImportTransactionsModal from "@/components/ImportTransactionsModal";
+import LinkBankModal from "@/components/LinkBankModal";
 
 /**
  * The Flask /dashboard endpoint now returns this structure:
@@ -59,7 +61,7 @@ export default function DashboardPage() {
   const [chartData, setChartData] = useState<ChartData | null>(null);
 
   // State for modals
-  const [showAddModal, setShowAddModal] = useState(false);
+  // const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [editingTransaction, setEditingTransaction] =
     useState<Transaction | null>(null);
@@ -67,6 +69,10 @@ export default function DashboardPage() {
   // For any potential errors or loading states
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(true);
+
+  // import modal
+  const [showImportModal, setShowImportModal] = useState(false);
+  const [showLinkBankModal, setShowLinkBankModal] = useState(false);
 
   // On component mount, fetch data from the Flask `/dashboard`
   useEffect(() => {
@@ -139,9 +145,57 @@ export default function DashboardPage() {
     <div className="container">
       <h1>Dashboard</h1>
 
-      {/* Button to open Add Expense (Transaction) Modal */}
-      <Button onClick={() => setShowAddModal(true)}>Add Transaction</Button>
+      {/* <Button onClick={() => setShowAddModal(true)}>Add Transaction</Button> */}
 
+      {/* Link Bank Account Button => opens the LinkBankModal */}
+      <Button
+        onClick={() => setShowLinkBankModal(true)}
+        style={{ marginRight: "1rem" }}
+      >
+        Link Bank Account
+      </Button>
+
+      <LinkBankModal
+        show={showLinkBankModal}
+        onClose={() => setShowLinkBankModal(false)}
+      />
+      <Button
+        onClick={async () => {
+          try {
+            const resp = await fetch(
+              "http://localhost:8000/banks/refresh_link",
+              {
+                method: "POST",
+                credentials: "include",
+              }
+            );
+            if (!resp.ok) {
+              const data = await resp.json();
+              console.error("Failed to refresh link status:", data);
+              return;
+            }
+            const data = await resp.json();
+            console.log("Refreshed link status:", data);
+            // Possibly reload or update local state
+            window.location.reload();
+          } catch (err) {
+            console.error("Error refreshing link status:", err);
+          }
+        }}
+        style={{ marginRight: "1rem" }}
+      >
+        Refresh Link Status
+      </Button>
+      {/* Import Transactions Button */}
+      <Button onClick={() => setShowImportModal(true)}>
+        Import Transactions
+      </Button>
+
+      {/* The Import Transactions modal */}
+      <ImportTransactionsModal
+        show={showImportModal}
+        onClose={() => setShowImportModal(false)}
+      />
       {/* Render the transaction list */}
       <ul style={{ marginTop: "1rem" }}>
         {transactions.map((txn) => (
@@ -165,10 +219,10 @@ export default function DashboardPage() {
       </ul>
 
       {/* Modals */}
-      <AddExpenseModal
+      {/* <AddExpenseModal
         show={showAddModal}
         onClose={() => setShowAddModal(false)}
-      />
+      /> */}
       <EditExpenseModal
         show={showEditModal}
         onClose={() => setShowEditModal(false)}

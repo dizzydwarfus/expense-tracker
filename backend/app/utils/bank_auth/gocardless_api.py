@@ -1,3 +1,4 @@
+# backend/app/utils/bank_auth/gocardless_api.py
 # Sourced from: https://github.com/gocardless/gocardless-pro-python/blob/master/gocardless_pro/
 
 from functools import wraps
@@ -501,42 +502,42 @@ if __name__ == "__main__":
         access_token=os.environ["GOCARDLESS_ACCESS_TOKEN"],
     )
 
-    banks = client.get(bank_institutions_path)
+    # banks = client.get(bank_institutions_path)
 
-    end_user_params = {
-        "path": end_user_agreement_path,
-        "institution_id": "ING_INGBNL2A",
-        "max_historical_days": 540,
-        "access_valid_for_days": 180,
-    }
-    client.create_end_user_agreement(**end_user_params)
+    # end_user_params = {
+    #     "path": end_user_agreement_path,
+    #     "institution_id": "ING_INGBNL2A",
+    #     "max_historical_days": 540,
+    #     "access_valid_for_days": 180,
+    # }
+    # client.create_end_user_agreement(**end_user_params)
 
-    bank_account_params = {
-        "path": requisition_path,
-        "open_browser": True,
-    }
-    client.link_bank_account(**bank_account_params)
+    # bank_account_params = {
+    #     "path": requisition_path,
+    #     "open_browser": True,
+    # }
+    # client.link_bank_account(**bank_account_params)
 
-    client.get_agreement(
-        path=end_user_agreement_path,
-        agreement_id="7154e6cc-08de-402a-b1ab-65a4b8ae240a",
-    )
+    # client.get_agreement(
+    #     path=end_user_agreement_path,
+    #     agreement_id="7154e6cc-08de-402a-b1ab-65a4b8ae240a",
+    # )
 
-    client.list_accounts(
-        path=requisition_path, requisition_id="c4b238d7-f5cc-47e9-bc79-0af986aba95e"
-    )
+    # client.list_accounts(
+    #     path=requisition_path, requisition_id="c4b238d7-f5cc-47e9-bc79-0af986aba95e"
+    # )
     client.get_transactions(
-        "f7edfdc0-1bcc-4a8e-b553-d1080f8880c3", "2024-01-01", "2025-03-01"
+        "54b67147-2720-4e21-b4d2-8302dd8f59dd", "2025-03-01", "2025-03-04"
     )
     local_data_path = "/Users/dizzydwarfus/Dev/expense-tracker/local_data"
 
-    with open(
-        f"{local_data_path}/end_user_agreement.json", "w", encoding="utf-8"
-    ) as file:
-        json.dump(client.end_user_agreement, file, indent=2)
+    # with open(
+    #     f"{local_data_path}/end_user_agreement.json", "w", encoding="utf-8"
+    # ) as file:
+    #     json.dump(client.end_user_agreement, file, indent=2)
 
-    with open(f"{local_data_path}/account_list.json", "w", encoding="utf-8") as file:
-        json.dump(client.accounts_list, file, indent=2)
+    # with open(f"{local_data_path}/account_list.json", "w", encoding="utf-8") as file:
+    #     json.dump(client.accounts_list, file, indent=2)
 
     with open(f"{local_data_path}/transactions.json", "w", encoding="utf-8") as file:
         json.dump(client.transactions, file, indent=2)

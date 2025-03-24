@@ -53,7 +53,9 @@ def create_app():
     from app.routes.auth import auth as auth_blueprint
     from app.routes.main import main as main_blueprint
     from app.routes.expenses import expenses as expenses_blueprint
+    from app.routes.bank import bank_bp
 
+    app.register_blueprint(bank_bp)
     app.register_blueprint(auth_blueprint)
     app.register_blueprint(main_blueprint)
     app.register_blueprint(expenses_blueprint)
