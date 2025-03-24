@@ -253,8 +253,8 @@ class ApiClient(object):
         Returns:
           A requests ``Response`` object.
         """
-        print(self._url_for(path))
-        print(json.dumps(self._headers(headers), indent=2))
+        # print(self._url_for(path))
+        # print(json.dumps(self._headers(headers), indent=2))
         response = requests.get(
             self._url_for(path), params=params, headers=self._headers(headers)
         )
@@ -275,8 +275,8 @@ class ApiClient(object):
         Returns:
           A requests ``Response`` object.
         """
-        print(self._url_for(path))
-        print(json.dumps(self._headers(headers), indent=2))
+        # print(self._url_for(path))
+        # print(json.dumps(self._headers(headers), indent=2))
         response = requests.post(
             self._url_for(path), data=json.dumps(body), headers=self._headers(headers)
         )
@@ -297,8 +297,8 @@ class ApiClient(object):
         Returns:
           A requests ``Response`` object.
         """
-        print(self._url_for(path))
-        print(json.dumps(self._headers(headers), indent=2))
+        # print(self._url_for(path))
+        # print(json.dumps(self._headers(headers), indent=2))
         response = requests.put(
             self._url_for(path), data=json.dumps(body), headers=self._headers(headers)
         )
@@ -306,7 +306,7 @@ class ApiClient(object):
         return response
 
     @update_rate_limit
-    def delete(self, path, body, headers=None):
+    def delete(self, path, body=None, headers=None):
         """Perform a DELETE request, providing a body, which will be JSON-encoded.
 
         Args:
@@ -319,12 +319,12 @@ class ApiClient(object):
         Returns:
           A requests ``Response`` object.
         """
-        print(self._url_for(path))
-        print(json.dumps(self._headers(headers), indent=2))
+        # print(self._url_for(path))
+        # print(json.dumps(self._headers(headers), indent=2))
         response = requests.delete(
             self._url_for(path), data=json.dumps(body), headers=self._headers(headers)
         )
-        self._handle_errors(response)
+        # self._handle_errors(response)
         return response
 
     def _handle_errors(self, response):
@@ -490,20 +490,59 @@ class ApiClient(object):
 if __name__ == "__main__":
     from dotenv import load_dotenv
     import os
+    from bank_auth import BankConnect
 
     bank_institutions_path = "institutions/?country=nl"
     end_user_agreement_path = "agreements/enduser/"
     requisition_path = "requisitions/"
     redirect_url = "http://localhost:8000/callback"
+    env_filepath = "/Users/dizzydwarfus/Dev/expense-tracker/backend/.env"
 
     load_dotenv()
+
+    # bank_connect = BankConnect(
+    #     base_url=os.environ["GOCARDLESS_BANK_ACCOUNT_INFO_BASE_URL"],
+    #     redirect_url=os.environ["GOCARDLESS_REDIRECT_URL"],
+    #     secret_key=os.environ["GOCARDLESS_SECRET_KEY"],
+    #     secret_id=os.environ["GOCARDLESS_SECRET_ID"],
+    #     access_token=os.environ["GOCARDLESS_ACCESS_TOKEN"],
+    #     refresh_token=os.environ["GOCARDLESS_REFRESH_TOKEN"],
+    # )
+
+    # refresh = bank_connect.refresh_access_token()
+    # bank_connect.upsert_tokens(
+    #     env_filepath, bank_connect.access_token, bank_connect.refresh_token
+    # )
+    load_dotenv()
+
     client = ApiClient(
         base_url=os.environ["GOCARDLESS_BANK_ACCOUNT_INFO_BASE_URL"],
         access_token=os.environ["GOCARDLESS_ACCESS_TOKEN"],
     )
+    #######################
+    # Get Institutions
+    #######################
+    # banks = client.get(bank_institutions_path).json()
 
-    # banks = client.get(bank_institutions_path)
+    # print(banks)
 
+    #######################
+    # Get Requisitions
+    #######################
+    reqs = client.get(requisition_path)
+    print(reqs.json())
+
+    #######################
+    # Delete Requisitions
+    #######################
+
+    # req_id = "a85b4722-98e4-4347-bac0-fee67c6ad318"
+    # reqs = client.delete(f"{requisition_path}/{req_id}")
+    # print(reqs.json())
+
+    #######################
+    # User Agreements
+    #######################
     # end_user_params = {
     #     "path": end_user_agreement_path,
     #     "institution_id": "ING_INGBNL2A",
@@ -512,6 +551,9 @@ if __name__ == "__main__":
     # }
     # client.create_end_user_agreement(**end_user_params)
 
+    #######################
+    # Link bank account
+    #######################
     # bank_account_params = {
     #     "path": requisition_path,
     #     "open_browser": True,
@@ -526,10 +568,18 @@ if __name__ == "__main__":
     # client.list_accounts(
     #     path=requisition_path, requisition_id="c4b238d7-f5cc-47e9-bc79-0af986aba95e"
     # )
-    client.get_transactions(
-        "54b67147-2720-4e21-b4d2-8302dd8f59dd", "2025-03-01", "2025-03-04"
-    )
-    local_data_path = "/Users/dizzydwarfus/Dev/expense-tracker/local_data"
+
+    #######################
+    # Get Transactions
+    #######################
+    # client.get_transactions(
+    #     "54b67147-2720-4e21-b4d2-8302dd8f59dd", "2025-03-01", "2025-03-04"
+    # )
+
+    #######################
+    # Save data locally
+    #######################
+    # local_data_path = "/Users/dizzydwarfus/Dev/expense-tracker/local_data"
 
     # with open(
     #     f"{local_data_path}/end_user_agreement.json", "w", encoding="utf-8"
@@ -539,5 +589,5 @@ if __name__ == "__main__":
     # with open(f"{local_data_path}/account_list.json", "w", encoding="utf-8") as file:
     #     json.dump(client.accounts_list, file, indent=2)
 
-    with open(f"{local_data_path}/transactions.json", "w", encoding="utf-8") as file:
-        json.dump(client.transactions, file, indent=2)
+    # with open(f"{local_data_path}/transactions.json", "w", encoding="utf-8") as file:
+    #     json.dump(client.transactions, file, indent=2)
