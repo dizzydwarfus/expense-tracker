@@ -29,3 +29,5 @@ poetry.lock
 .env
 
 venv312
+
+local_data

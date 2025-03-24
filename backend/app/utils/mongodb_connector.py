@@ -1,3 +1,5 @@
+# backend/app/utils/mongodb_connector.py
+
 # Built-in libraries
 import datetime as dt
 from typing import Union
@@ -9,7 +11,7 @@ from pymongo import MongoClient
 from app.utils._logger import MyLogger
 from app.utils._password_utils import hash_password
 from app.models.users import User
-from app.models.transactions import Transaction
+from app.models.transactions import GoCardlessTransaction
 
 
 class MongoConnector(MyLogger):
@@ -19,25 +21,6 @@ class MongoConnector(MyLogger):
         )
         self.client = MongoClient(connection_string)
         self.db = self.client.ExpenseTrackerWebApp
-
-        # try:
-        #     self.users.create_indexes(
-        #         [IndexModel([('', ASCENDING)], unique=True)])
-        # except OperationFailure as e:
-        #     self.scrape_logger.error(e)
-
-        # try:
-        #     self.categories.create_indexes([IndexModel(
-        #         [('', ASCENDING)], unique=True), IndexModel([('form', ASCENDING)])])
-        # except OperationFailure as e:
-        #     self.scrape_logger.error(e)
-
-        # try:
-        #     self.transactions.create_indexes(
-        #         [IndexModel([('', ASCENDING)], unique=True)])
-
-        # except OperationFailure as e:
-        #     self.scrape_logger.error(e)
 
     @property
     def server_info(self):
@@ -95,41 +78,30 @@ class ExpenseTrackerWebAppDB(MongoConnector):
         )
         return True
 
-    def upsert_transaction(
-        self,
-        transaction_date: Union[str, dt.datetime],
-        transaction_type: str,
-        description: str,
-        group: str,
-        paidBy: str,
-        amount: float,
-        currency: str,
-        split: dict[str, float],
-    ):
+    def upsert_transaction(self, transaction_doc: dict) -> bool:
+        """
+        Insert or update a transaction in the database based on new GoCardlessTransaction fields.
+        'transaction_doc' should have the keys that match GoCardlessTransaction.
+        """
         now = dt.datetime.now()
-        parsed_date = self.parse_date(date=transaction_date)
 
-        transaction_id = f"{dt.datetime.strftime(parsed_date, '%Y-%m-%d').replace('-', '')}{paidBy}{amount:.2f}{group}"
-        transaction = Transaction(
-            transactionDate=parsed_date,
-            transactionType=transaction_type,
-            description=description,
-            group=group,
-            paidBy=paidBy,
-            amount=amount,
-            currency=currency,
-            split=split,
-            transactionId=transaction_id,
-        ).model_dump()
+        txn_model = GoCardlessTransaction(**transaction_doc)
+
+        unique_id = None
+        if txn_model.transactionId:
+            unique_id = txn_model.transactionId
+        elif txn_model.internalTransactionId:
+            unique_id = txn_model.internalTransactionId
+        else:
+            # fallback? possibly user + bookingDate + something
+            unique_id = str(now.timestamp())
+
+        txn_dict = txn_model.model_dump(by_alias=True, exclude_none=True)
 
         self.transactions.update_one(
-            {"_id": transaction_id},
+            {"_id": unique_id},
             {
-                # '$currentDate': {
-                #     'updated_at': True,
-                #     # 'deleted_at': True
-                # },
-                "$set": {**transaction, "updatedDate": now},
+                "$set": {**txn_dict, "updatedDate": now},
                 "$setOnInsert": {"createdDate": now},
             },
             upsert=True,

@@ -150,7 +150,7 @@ cd ../backend
 python run.py
 ```
 
-By default, it starts on http://localhost:5000.
+By default, it starts on http://localhost:8000.
 
 ### 5. Run the frontend (nextjs)
 
@@ -160,7 +160,7 @@ npm run dev
 ```
 
 This starts Next.js on http://localhost:3000.
-The app calls the Flask backend at http://localhost:5000.
+The app calls the Flask backend at http://localhost:8000.
 
 ---
 

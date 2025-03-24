@@ -4,7 +4,6 @@ from flask import Blueprint, request, flash
 from flask_login import login_user, logout_user, login_required, current_user
 from app.utils._password_utils import check_password
 from app.utils.mongo_user import MongoUser
-from werkzeug.security import generate_password_hash  # If you want to keep using it
 
 from app import create_app
 
