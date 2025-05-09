@@ -107,7 +107,7 @@ def import_transactions():
     print("Account ID: ", account_id)
     print("Date From: ", date_from)
     print("Date To: ", date_to)
-    print("Transactions ", trans_resp)
+    # print("Transactions ", trans_resp)
 
     # store each transaction doc in your "transactions" collection, or do further processing
     # e.g. trans_resp["transactions"]["booked"]
@@ -121,10 +121,10 @@ def import_transactions():
         t["username"] = current_user.id
 
     # insert in your DB
-    # if booked:
-    #     app.mongo.transactions.upsert_transaction(booked)
-    # if pending:
-    #     app.mongo.transactions.upsert_transaction(pending)
+    if booked:
+        app.mongo.upsert_transaction(booked)
+    if pending:
+        app.mongo.upsert_transaction(pending)
 
     return jsonify({"success": True, "imported": len(booked) + len(pending)}), 200
 
@@ -277,8 +277,6 @@ def refresh_link_account():
     accounts_resp = client.list_accounts(
         path="requisitions/", requisition_id=requisition_id
     )
-    # e.g. might have: { "id": requisition_id, "accounts": [...] }
-
     # 2) Get updated agreement data
     agreement_resp = client.get_agreement(
         path="agreements/enduser", agreement_id=agreement_id
